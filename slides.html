@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>深圳市儿童公园 · 深港&国际IP联动方案</title>
+
+    <!-- Fonts: Cormorant (elegant serif) + IBM Plex Sans (clean body) -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,600;0,700;1,400;1,600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* ===========================================
+           CSS CUSTOM PROPERTIES — DARK BOTANICAL
+           =========================================== */
+        :root {
+            /* Colors */
+            --bg-primary: #0f0f0f;
+            --bg-card: #1a1a1a;
+            --text-primary: #e8e4df;
+            --text-secondary: #9a9590;
+            --text-dim: rgba(154,149,144,0.4);
+            --accent-warm: #d4a574;
+            --accent-pink: #e8b4b8;
+            --accent-gold: #c9b896;
+            --accent-green: #8b9a6b;
+            --accent-blue: #7a9ab5;
+
+            /* Typography — all clamp() */
+            --font-display: 'Cormorant', serif;
+            --font-body: 'IBM Plex Sans', sans-serif;
+            --title-size: clamp(2rem, 6vw, 4.5rem);
+            --h2-size: clamp(1.4rem, 3.5vw, 2.5rem);
+            --h3-size: clamp(1rem, 2vw, 1.5rem);
+            --body-size: clamp(0.7rem, 1.2vw, 1rem);
+            --small-size: clamp(0.6rem, 0.9vw, 0.8rem);
+            --kicker-size: clamp(0.55rem, 0.85vw, 0.72rem);
+
+            /* Spacing */
+            --slide-padding: clamp(1.5rem, 4vw, 4rem);
+            --content-gap: clamp(0.8rem, 2vw, 2rem);
+            --element-gap: clamp(0.4rem, 1vw, 1rem);
+
+            /* Animation */
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --duration-normal: 0.7s;
+        }
+
+        /* ===========================================
+           BASE STYLES
+           =========================================== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        /* --- VIEWPORT BASE (from viewport-base.css) --- */
+        html, body { height: 100%; overflow-x: hidden; }
+        html { scroll-snap-type: y mandatory; scroll-behavior: smooth; }
+
+        body {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+        }
+
+        .slide {
+            width: 100vw; height: 100vh; height: 100dvh;
+            overflow: hidden;
+            scroll-snap-align: start;
+            display: flex; flex-direction: column;
+            position: relative;
+        }
+
+        .slide-content {
+            flex: 1; display: flex; flex-direction: column;
+            justify-content: center; max-height: 100%; overflow: hidden;
+            padding: var(--slide-padding);
+        }
+
+        img { max-width: 100%; max-height: min(50vh, 400px); object-fit: contain; }
+
+        @media (max-height: 700px) {
+            :root {
+                --slide-padding: clamp(0.75rem, 3vw, 2rem);
+                --content-gap: clamp(0.4rem, 1.5vw, 1rem);
+                --title-size: clamp(1.5rem, 5vw, 3rem);
+                --h2-size: clamp(1.2rem, 3vw, 2rem);
+            }
+        }
+        @media (max-height: 600px) {
+            :root {
+                --slide-padding: clamp(0.5rem, 2.5vw, 1.5rem);
+                --title-size: clamp(1.2rem, 4vw, 2.2rem);
+                --body-size: clamp(0.65rem, 1vw, 0.9rem);
+            }
+            .nav-dots, .decorative { display: none; }
+        }
+        @media (max-height: 500px) {
+            :root {
+                --slide-padding: clamp(0.4rem, 2vw, 1rem);
+                --title-size: clamp(1rem, 3.5vw, 1.8rem);
+                --h2-size: clamp(0.9rem, 2.5vw, 1.4rem);
+                --body-size: clamp(0.6rem, 0.9vw, 0.8rem);
+            }
+        }
+        @media (max-width: 600px) {
+            :root { --title-size: clamp(1.5rem, 8vw, 2.8rem); }
+            .grid-2, .grid-3 { grid-template-columns: 1fr !important; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.2s !important;
+            }
+            html { scroll-behavior: auto; }
+        }
+
+        /* ===========================================
+           DARK BOTANICAL THEME
+           =========================================== */
+
+        /* Soft gradient orbs */
+        .orb {
+            position: absolute; border-radius: 50%;
+            filter: blur(80px); pointer-events: none;
+        }
+        .orb-warm { background: linear-gradient(135deg, #d4a574, #e8b4b8); opacity: 0.12; }
+        .orb-green { background: linear-gradient(135deg, #8b9a6b, #c9b896); opacity: 0.1; }
+        .orb-pink { background: linear-gradient(135deg, #e8b4b8, #d4a574); opacity: 0.08; }
+        .orb-blue { background: linear-gradient(135deg, #7a9ab5, #8b9a6b); opacity: 0.1; }
+
+        /* Accent line */
+        .accent-line {
+            width: 1px; height: clamp(30px, 6vh, 60px);
+            background: linear-gradient(to bottom, transparent, var(--accent-warm), transparent);
+            margin: 0 auto clamp(0.6rem, 1.5vh, 1.2rem);
+        }
+        .accent-line-h {
+            width: clamp(40px, 6vw, 80px); height: 1px;
+            background: linear-gradient(to right, transparent, var(--accent-warm), transparent);
+        }
+
+        /* Kicker / section label */
+        .kicker {
+            font-family: var(--font-body); font-weight: 300;
+            font-size: var(--kicker-size); color: var(--accent-warm);
+            letter-spacing: 4px; text-transform: uppercase;
+            margin-bottom: clamp(0.4rem, 1vh, 0.8rem);
+        }
+
+        /* Display headings */
+        h1, .display { font-family: var(--font-display); }
+        h1 { font-size: var(--title-size); font-weight: 600; line-height: 1.1; color: var(--text-primary); }
+        h1 em { font-style: italic; color: var(--accent-pink); }
+        h2 { font-family: var(--font-display); font-size: var(--h2-size); font-weight: 600; line-height: 1.2; }
+        h3 { font-family: var(--font-display); font-size: var(--h3-size); font-weight: 600; line-height: 1.3; }
+
+        .subtitle {
+            font-family: var(--font-body); font-weight: 300;
+            font-size: var(--body-size); color: var(--text-secondary);
+            line-height: 1.8; max-width: min(85vw, 550px);
+        }
+
+        /* Tags */
+        .tags { display: flex; gap: clamp(0.4rem, 0.8vw, 0.8rem); flex-wrap: wrap; }
+        .tag {
+            font-family: var(--font-body); font-size: var(--small-size);
+            color: var(--text-secondary); letter-spacing: 1px;
+            border: 1px solid rgba(154,149,144,0.2); border-radius: 100px;
+            padding: clamp(0.2rem, 0.4vh, 0.4rem) clamp(0.6rem, 1vw, 1rem);
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card); border-radius: clamp(10px, 1.5vw, 16px);
+            padding: clamp(1rem, 2.5vw, 2rem); border: 1px solid rgba(154,149,144,0.08);
+            transition: border-color 0.3s;
+        }
+        .card:hover { border-color: rgba(154,149,144,0.2); }
+        .card h3 { margin-bottom: clamp(0.3rem, 0.8vh, 0.6rem); color: var(--text-primary); }
+        .card p, .card li {
+            font-size: var(--body-size); color: var(--text-secondary);
+            line-height: 1.7;
+        }
+        .card ul { list-style: none; padding: 0; }
+        .card ul li::before {
+            content: '—'; color: var(--accent-warm); margin-right: 0.5em; opacity: 0.6;
+        }
+        .card-accent { border-left: 2px solid var(--accent-warm); }
+
+        /* Grids */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(0.8rem, 1.5vw, 1.5rem); }
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(0.8rem, 1.5vw, 1.5rem); }
+
+        /* Section title slide style */
+        .section-slide {
+            text-align: center; align-items: center; justify-content: center;
+        }
+        .section-slide .slide-content { align-items: center; }
+        .section-num {
+            font-family: var(--font-display); font-weight: 700;
+            font-size: clamp(4rem, 12vw, 10rem); line-height: 1;
+            color: rgba(154,149,144,0.04); position: absolute;
+        }
+
+        /* Image styling */
+        .slide-image {
+            max-width: 100%; max-height: min(50vh, 400px);
+            object-fit: contain; border-radius: clamp(8px, 1vw, 12px);
+            border: 1px solid rgba(154,149,144,0.1);
+        }
+        .slide-image-sm { max-height: min(35vh, 280px); }
+        .slide-image-round { border-radius: clamp(12px, 2vw, 20px); }
+
+        /* Film cards (for Nature Trilogy) */
+        .film-card {
+            border-radius: clamp(10px, 1.5vw, 16px); overflow: hidden;
+            border: 1px solid rgba(154,149,144,0.1);
+        }
+        .film-card img {
+            width: 100%; height: clamp(100px, 18vh, 180px);
+            object-fit: cover; max-height: none;
+        }
+        .film-card-body {
+            padding: clamp(0.6rem, 1.5vw, 1.2rem);
+            background: var(--bg-card);
+        }
+        .film-card-body h3 { font-size: clamp(0.9rem, 1.5vw, 1.2rem); margin-bottom: 0.2rem; }
+        .film-card-body .film-en {
+            font-family: var(--font-body); font-size: var(--small-size);
+            color: var(--accent-warm); letter-spacing: 2px; text-transform: uppercase;
+            margin-bottom: 0.3rem;
+        }
+        .film-card-body p { font-size: var(--small-size); color: var(--text-secondary); line-height: 1.6; }
+
+        /* Timeline */
+        .timeline { display: flex; flex-direction: column; gap: clamp(0.8rem, 2vh, 1.5rem); max-width: min(90vw, 700px); }
+        .timeline-item {
+            display: flex; gap: clamp(0.6rem, 1.5vw, 1.2rem); align-items: flex-start;
+        }
+        .timeline-dot {
+            width: clamp(8px, 1.2vw, 12px); height: clamp(8px, 1.2vw, 12px);
+            border-radius: 50%; flex-shrink: 0; margin-top: 0.4em;
+        }
+        .timeline-text h4 {
+            font-family: var(--font-display); font-size: clamp(0.9rem, 1.5vw, 1.2rem);
+            font-weight: 600; margin-bottom: 0.2rem;
+        }
+        .timeline-text p { font-size: var(--small-size); color: var(--text-secondary); line-height: 1.6; }
+
+        /* Data table */
+        .data-table {
+            width: 100%; border-collapse: collapse;
+            font-size: var(--small-size); max-width: min(90vw, 900px);
+        }
+        .data-table th {
+            text-align: left; padding: clamp(0.4rem, 1vh, 0.8rem) clamp(0.5rem, 1vw, 1rem);
+            color: var(--accent-warm); font-weight: 500; letter-spacing: 1px;
+            border-bottom: 1px solid rgba(154,149,144,0.15);
+            font-size: var(--small-size);
+        }
+        .data-table td {
+            padding: clamp(0.4rem, 0.8vh, 0.7rem) clamp(0.5rem, 1vw, 1rem);
+            color: var(--text-secondary); border-bottom: 1px solid rgba(154,149,144,0.06);
+            line-height: 1.5;
+        }
+        .data-table tr:hover td { color: var(--text-primary); }
+
+        /* Principle pills */
+        .principle {
+            text-align: center; padding: clamp(0.8rem, 2vw, 1.5rem);
+            background: var(--bg-card); border-radius: clamp(10px, 1.5vw, 16px);
+            border: 1px solid rgba(154,149,144,0.08);
+        }
+        .principle-icon {
+            font-size: clamp(1.2rem, 2.5vw, 2rem); margin-bottom: clamp(0.3rem, 0.8vh, 0.6rem);
+            opacity: 0.8;
+        }
+        .principle h4 {
+            font-family: var(--font-display); font-size: clamp(0.85rem, 1.3vw, 1.1rem);
+            margin-bottom: 0.2rem;
+        }
+        .principle p { font-size: var(--small-size); color: var(--text-secondary); line-height: 1.5; }
+
+        /* Bottom signature */
+        .bottom-sig {
+            position: absolute; bottom: clamp(0.8rem, 2vh, 1.5rem);
+            left: 50%; transform: translateX(-50%);
+            font-family: var(--font-display); font-style: italic;
+            font-size: var(--small-size); color: var(--text-dim);
+            letter-spacing: 2px; white-space: nowrap;
+        }
+
+        /* Slide counter */
+        .slide-num {
+            position: absolute; top: clamp(0.8rem, 2vh, 1.5rem);
+            right: clamp(1rem, 3vw, 2rem);
+            font-family: var(--font-body); font-size: var(--small-size);
+            color: var(--text-dim); letter-spacing: 2px;
+        }
+
+        /* ===========================================
+           ANIMATIONS (Editorial/Calm feel)
+           =========================================== */
+        .reveal {
+            opacity: 0; transform: translateY(20px);
+            transition: opacity var(--duration-normal) var(--ease-out-expo),
+                        transform var(--duration-normal) var(--ease-out-expo);
+        }
+        .reveal-scale {
+            opacity: 0; transform: scale(0.95);
+            transition: opacity var(--duration-normal) var(--ease-out-expo),
+                        transform var(--duration-normal) var(--ease-out-expo);
+        }
+        .slide.visible .reveal,
+        .slide.visible .reveal-scale { opacity: 1; transform: translateY(0) scale(1); }
+
+        .slide.visible .reveal:nth-child(1) { transition-delay: 0.05s; }
+        .slide.visible .reveal:nth-child(2) { transition-delay: 0.15s; }
+        .slide.visible .reveal:nth-child(3) { transition-delay: 0.25s; }
+        .slide.visible .reveal:nth-child(4) { transition-delay: 0.35s; }
+        .slide.visible .reveal:nth-child(5) { transition-delay: 0.45s; }
+
+        /* ===========================================
+           PROGRESS BAR
+           =========================================== */
+        .progress-bar {
+            position: fixed; top: 0; left: 0; height: 2px;
+            background: linear-gradient(90deg, var(--accent-warm), var(--accent-pink));
+            z-index: 1000; width: 0%; transition: width 0.3s ease;
+        }
+
+        /* ===========================================
+           NAV DOTS
+           =========================================== */
+        .nav-dots {
+            position: fixed; right: clamp(0.6rem, 1.5vw, 1.2rem);
+            top: 50%; transform: translateY(-50%);
+            display: flex; flex-direction: column; gap: clamp(6px, 0.8vh, 10px);
+            z-index: 100;
+        }
+        .nav-dot {
+            width: clamp(5px, 0.6vw, 7px); height: clamp(5px, 0.6vw, 7px);
+            border-radius: 50%; background: rgba(154,149,144,0.2);
+            cursor: pointer; transition: all 0.3s;
+            border: none; padding: 0;
+        }
+        .nav-dot.active { background: var(--accent-warm); transform: scale(1.4); }
+        .nav-dot:hover { background: var(--accent-pink); }
+
+        /* Utility */
+        .text-center { text-align: center; }
+        .mx-auto { margin-left: auto; margin-right: auto; }
+        .gap-sm { gap: clamp(0.4rem, 1vh, 0.8rem); }
+        .gap-md { gap: var(--content-gap); }
+        .mt-sm { margin-top: clamp(0.4rem, 1vh, 0.8rem); }
+        .mt-md { margin-top: var(--content-gap); }
+        .flex-col { display: flex; flex-direction: column; }
+        .items-center { align-items: center; }
+    </style>
+</head>
+<body>
+
+<!-- Progress bar -->
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- Navigation dots (generated by JS) -->
+<nav class="nav-dots" id="navDots" aria-label="Slide navigation"></nav>
+
+<!-- ===========================================
+     SLIDE 01: COVER
+     =========================================== -->
+<section class="slide section-slide" data-title="Cover">
+    <div class="orb orb-warm" style="width:clamp(250px,40vw,500px);height:clamp(250px,40vw,500px);top:-10%;right:-8%;"></div>
+    <div class="orb orb-green" style="width:clamp(180px,28vw,380px);height:clamp(180px,28vw,380px);bottom:-8%;left:-5%;"></div>
+    <div class="orb orb-pink" style="width:clamp(120px,20vw,260px);height:clamp(120px,20vw,260px);top:35%;left:25%;"></div>
+    <div class="slide-content items-center text-center">
+        <div class="accent-line reveal"></div>
+        <div class="kicker reveal">Shenzhen Children's Park · 2026</div>
+        <h1 class="reveal">深圳市儿童公园<br><em>IP联动方案</em></h1>
+        <p class="subtitle reveal" style="margin-top:clamp(0.5rem,1.5vh,1rem);">深港&国际IP内容驱动儿童公园新生态<br>打造新一代城市儿童文化空间和IP体验目的地</p>
+        <div class="tags reveal" style="margin-top:clamp(1rem,3vh,2rem);">
+            <span class="tag">麦兜 IP 合作</span>
+            <span class="tag">自然三部曲联名</span>
+            <span class="tag">深港文化共融</span>
+        </div>
+    </div>
+    <div class="bottom-sig">— 深港&国际IP联动 —</div>
+</section>
+
+<!-- ===========================================
+     SLIDE 02: POSITIONING
+     =========================================== -->
+<section class="slide section-slide" data-title="定位">
+    <div class="section-num" style="top:8%;left:8%;">01</div>
+    <div class="orb orb-warm" style="width:clamp(200px,30vw,400px);height:clamp(200px,30vw,400px);bottom:-10%;right:-5%;"></div>
+    <div class="slide-content items-center text-center">
+        <div class="kicker reveal">Positioning</div>
+        <h2 class="reveal">双主题 · 双客群 · 双城联动</h2>
+        <p class="subtitle reveal">以深港城市记忆和国际顶级IP为双引擎<br>构建跨境亲子文化新地标</p>
+    </div>
+    <div class="slide-num">01 / 22</div>
+</section>
+
+<!-- ===========================================
+     SLIDE 03: TWO THEMES
+     =========================================== -->
+<section class="slide" data-title="双主题">
+    <div class="orb orb-green" style="width:clamp(150px,22vw,300px);height:clamp(150px,22vw,300px);top:-5%;left:-3%;"></div>
+    <div class="slide-content items-center" style="justify-content:center;">
+        <div class="grid-2 reveal-scale" style="max-width:min(90vw,900px);">
+            <div class="card card-accent">
+                <h3 style="color:var(--accent-warm);">主题一：深港时光机</h3>
+                <p>以深港城市发展历史为叙事线索，将儿童公园打造为一座承载深圳记忆、连接过去与未来的「时光隧道」。通过场景装置、主题雕塑、互动装置等，让孩子们在游玩中感受城市故事。</p>
+            </div>
+            <div class="card card-accent" style="border-left-color:var(--accent-green);">
+                <h3 style="color:var(--accent-green);">主题二：深港儿童友好</h3>
+                <p>依托罗湖毗邻香港的地缘优势，引入麦兜和自然三部曲——深受两地儿童喜爱的动画IP，打造深港文化共融的友好童乐空间，吸引跨境家庭亲子客群。</p>
+            </div>
+        </div>
+        <img src="images/page29_img1.jpeg" alt="公园区位布局图" class="slide-image reveal mt-md" style="max-height:min(30vh,250px);">
+    </div>
+    <div class="slide-num">02 / 22</div>
+</section>
+
+<!-- ===========================================
+     SLIDE 04: TARGET AUDIENCE
+     =========================================== -->
+<section class="slide" data-title="目标群体">
+    <div class="orb orb-pink" style="width:clamp(180px,25vw,350px);height:clamp(180px,25vw,350px);bottom:-8%;right:-3%;"></div>
+    <div class="slide-content items-center">
+        <div class="kicker reveal">Target Audience</div>
+        <h2 class="reveal">目标群体</h2>
+        <div class="flex-col gap-sm reveal mt-md" style="max-width:min(85vw,600px);width:100%;">
+            <div class="card" style="padding:clamp(0.6rem,1.2vw,1rem) clamp(0.8rem,1.5vw,1.5rem);display:flex;align-items:center;gap:clamp(0.5rem,1vw,1rem);">
+                <span style="font-size:clamp(1rem,2vw,1.5rem);">👨‍👩‍👧</span>
+                <div><strong style="font-size:var(--body-size);">主力客群：0-12岁儿童亲子家庭</strong><br><span style="font-size:var(--small-size);color:var(--text-secondary);">深圳全市亲子家庭，覆盖幼儿到小学阶段</span></div>
+            </div>
+            <div class="card" style="padding:clamp(0.6rem,1.2vw,1rem) clamp(0.8rem,1.5vw,1.5rem);display:flex;align-items:center;gap:clamp(0.5rem,1vw,1rem);">
+                <span style="font-size:clamp(1rem,2vw,1.5rem);">🏘️</span>
+                <div><strong style="font-size:var(--body-size);">社区亲子家庭</strong><br><span style="font-size:var(--small-size);color:var(--text-secondary);">10分钟生活圈，高频复访用户群</span></div>
+            </div>
+            <div class="card" style="padding:clamp(0.6rem,1.2vw,1rem) clamp(0.8rem,1.5vw,1.5rem);display:flex;align-items:center;gap:clamp(0.5rem,1vw,1rem);">
+                <span style="font-size:clamp(1rem,2vw,1.5rem);">🌉</span>
+                <div><strong style="font-size:var(--body-size);">跨境深港双城家庭</strong><br><span style="font-size:var(--small-size);color:var(--text-secondary);">麦兜IP引流 + 口岸便利，吸引港深往返家庭</span></div>
+            </div>
+            <div class="card" style="padding:clamp(0.6rem,1.2vw,1rem) clamp(0.8rem,1.5vw,1.5rem);display:flex;align-items:center;gap:clamp(0.5rem,1vw,1rem);">
+                <span style="font-size:clamp(1rem,2vw,1.5rem);">📚</span>
+                <div><strong style="font-size:var(--body-size);">教育机构亲子研学团</strong><br><span style="font-size:var(--small-size);color:var(--text-secondary);">自然科普 + 深港文化主题课，组团研学</span></div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-num">03 / 22</div>
+</section>
+
+<!-- ===========================================
+     SLIDE 05: CORE IP MATRIX
+     =========================================== -->
+<section class="slide" data-title="核心IP">
+    <div class="orb orb-warm" style="width:clamp(200px,30vw,380px);height:clamp(200px,30vw,380px);top:-8%;left:-5%;"></div>
+    <div class="slide-content items-center">
+        <div class="kicker reveal">Core IP Matrix</div>
+        <h2 class="reveal">核心 IP 矩阵</h2>
+        <div class="grid-2 reveal-scale mt-md" style="max-width:min(90vw,850px);">
+            <div class="card" style="border-left:2px solid var(--accent-warm);">
+                <img src="images/page09_img1.jpeg" alt="麦兜与麦太" class="slide-image-sm" style="width:100%;border-radius:clamp(6px,1vw,10px);margin-bottom:clamp(0.5rem,1vh,0.8rem);object-fit:cover;max-height:min(25vh,200px);">
+                <h3 style="color:var(--accent-warm);">麦兜</h3>
+                <p style="font-size:var(--small-size);color:var(--accent-warm);margin-bottom:0.2rem;font-weight:500;">城市记忆 × 深港情感 × 公园代言人</p>
+                <p>华语世界最具代表性的原创动画IP，深港澳地区集体时代回忆</p>
+            </div>
+            <div class="card" style="border-left:2px solid var(--accent-green);">
+                <img src="images/page33_img1.jpeg" alt="凯尔经的秘密" class="slide-image-sm" style="width:100%;border-radius:clamp(6px,1vw,10px);margin-bottom:clamp(0.5rem,1vh,0.8rem);object-fit:cover;max-height:min(25vh,200px);">
+                <h3 style="color:var(--accent-green);">自然三部曲</h3>
+                <p style="font-size:var(--small-size);color:var(--accent-green);margin-bottom:0.2rem;font-weight:500;">自然教育 × 审美启蒙 × 暑期档热映</p>
+                <p>奥斯卡最佳动画提名、全球手绘动画美学巅峰，八十余项国际奖项</p>
+            </div>
+        </div>
+    </div>
+    <div class="slide-num">04 / 22</div>
+</section>
+
+<!-- ===========================================
+     SLIDE 06: MCDULL SECTION TITLE
+     =========================================== -->
+<section class="slide section-slide" data-title="麦兜IP">
+    <div class="section-num" style="top:10%;right:10%;">02</div>
+    <div class="orb orb-warm" style="width:clamp(280px,40vw,500px);height:clamp(280px,40vw,500px);top:-12%;left:-8%;"></div>
+    <div class="orb orb-pink" style="width:clamp(150px,22vw,300px);height:clamp(150px,22vw,300px);bottom:-5%;right:10%;"></div>
+    <div class="slide-content items-center text-center">
+        <div class="accent-line reveal"></div>
+        <div class="kicker reveal">McDull IP</div>
+        <h1 class="reveal" style="font-size:var(--h2-size);">麦兜 IP 联名合作</h1>
+        <p class="subtitle reveal">以麦兜憨萌的视角<br>重新发掘儿童公园之美</p>
+        <div class="reveal mt-md" style="display:flex;gap:clamp(0.5rem,1vw,1rem);">
+            <img src="images/page10_img1.jpeg" alt="麦兜海报" class="slide-image-sm slide-image-round" style="max-height:min(28vh,220px);">
+            <img src="images/page10_img2.jpeg" alt="麦兜海报" class="slide-image-sm slide-image-round" style="max-height:min(28vh,220px);">
+        </div>
+    </div>
+</section>
+
+<!-- ===========================================
+     SLIDE 07: MCDULL IP VALUE
+     =========================================== -->
+<section class="slide" data-title="IP价值">
+    <div class="orb orb-warm" style="width:clamp(180px,25vw,350px);height:clamp(180px,25vw,350px);bottom:-8%;left:-3%;"></div>
+    <div class="slide-content items-center">
+        <div class="kicker reveal">IP Value</div>
+        <h2 class="reveal">麦兜 IP 价值分析</h2>
+        <div class="grid-2 reveal-scale mt-md" style="max-width:min(90vw,850px);">
+            <div class="card">
+                <h3><span style="color:var(--accent-pink);">🌉</span> 深港文化纽带</h3>
+                <p>麦兜是香港最具代表性的动画IP，深受粤港澳大湾区儿童喜爱，天然契合「深港儿童友好」定位</p>
+            </div>
+            <div class="card">
+                <h3><span style="color:var(--accent-warm);">💛</span> 温情治愈调性</h3>
+                <p>麦兜憨萌、善良、充满童真的形象，与儿童公园「友好、快乐、包容」的气质高度吻合</p>
+            </div>
+            <div class="card">
+                <h3><span style="color:var(--accent-green);">👨‍👩‍👧</span> 跨代际共鸣</h3>
+                <p>80/90后家长是麦兜的童年记忆，儿童是现在受众，实现亲子两代情感共鸣</p>
+            </div>
+            <div class="card">
+                <h3><span style="color:var(--accent-blue);">📱</span> 社交传播力强</h3>
+                <p>经典台词与场景自带表情包体质，天然适合小红书、抖音二次传播</p>
+            </div>
+        </div>
+    </div>
+    <div class="slide-num">06 / 22</div>
+</section>
+
+<!-- ===========================================
+     SLIDE 08: MCDULL VISUAL THEME
+     =========================================== -->
+<section class="slide" data-title="视觉主题">
+    <div class="orb orb-pink" style="width:clamp(200px,30vw,400px);height:clamp(200px,30vw,400px);top:-5%;right:-5%;"></div>
+    <div class="slide-content items-center text-center">
+        <div class="kicker reveal">Visual Theme</div>
+        <h2 class="reveal" style="color:var(--accent-warm);">「麦兜去儿童公园啦！」</h2>
+        <div class="card reveal mt-md" style="max-width:min(85vw,600px);background:linear-gradient(135deg,rgba(212,165,116,0.08),rgba(232,180,184,0.08));border-color:rgba(212,165,116,0.2);">
+            <p style="line-height:2;text-align:center;">
+                暖橙色 + 天蓝色主调，与公园各区颜色呼应<br>
+                麦兜插画风格注入导视、指示牌、地面印绘、围栏贴膜<br>
+                营造沉浸式 IP 空间氛围
+            </p>
+        </div>
+        <img src="images/page12_img1.jpeg" alt="视觉主题设定" class="slide-image reveal mt-md" style="max-height:min(30vh,240px);">
+    </div>
+    <div class="slide-num">07 / 22</div>
+</section>
+
+<!-- ===========================================
+     SLIDE 09: MCDULL EXPERIENCE 1
+     =========================================== -->
+<section class="slide" data-title="麦兜体验1">
+    <div class="orb orb-warm" style="width:clamp(160px,22vw,300px);height:clamp(160px,22vw,300px);top:-5%;left:-3%;"></div>
+    <div class="slide-content items-center">
+        <div class="kicker reveal">Core Experiences</div>
+        <h2 class="reveal">核心体验项目</h2>
+        <div class="grid-2 reveal-scale mt-md" style="max-width:min(90vw,900px);">
+            <div class="card">
+                <img src="images/page13_img1.jpeg" alt="巨型充气麦兜" style="width:100%;max-height:min(22vh,180px);object-fit:cover;border-radius:clamp(6px,1vw,10px);margin-bottom:clamp(0.4rem,0.8vh,0.6rem);">
+                <h3>麦兜的云端旅行</h3>
+                <ul>
+                    <li>8-10米巨型充气麦兜</li>
+                    <li>园区入口视觉焦点 + 打卡地标</li>
+                    <li>限定版「随手牵」迷你气球周边</li>
+                </ul>
+            </div>
+            <div class="card">
+                <img src="images/page15_img1.jpeg" alt="麦兜玩偶" style="width:100%;max-height:min(22vh,180px);object-fit:contain;border-radius:clamp(6px,1vw,10px);margin-bottom:clamp(0.4rem,0.8vh,0.6rem);background:rgba(255,255,255,0.03);">
+                <h3>麦兜玩偶巡游</h3>
+                <ul>
+                    <li>2套麦兜 + 1套麦太玩偶</li>
+                    <li>每周六日「麦兜奇遇记」花车巡游</li>
+                    <li>专属签名卡，增强仪式感</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="slide-num">08 / 22</div>
+</section>
+
+<!-- ===========================================
+     SLIDE 10: MCDULL EXPERIENCE 2
+     =========================================== -->
+<section class="slide" data-title="麦兜体验2">
+    <div class="orb orb-green" style="width:clamp(150px,20vw,280px);height:clamp(150px,20vw,280px);bottom:-5%;right:-3%;"></div>
+    <div class="slide-content items-center">
+        <div class="grid-2 reveal-scale" style="max-width:min(90vw,900px);">
+            <div class="card">
+                <img src="images/page17_img1.jpeg" alt="主题餐车" style="width:100%;max-height:min(22vh,180px);object-fit:cover;border-radius:clamp(6px,1vw,10px);margin-bottom:clamp(0.4rem,0.8vh,0.6rem);">
+                <h3>麦兜移动餐车</h3>
+                <ul>
+                    <li>复古港式双层巴士/叮叮车造型</li>
+                    <li>经典「鱼丸粗面」梦想成真</li>
+                    <li>麦兜造型限定碗</li>
+                </ul>
+            </div>
+            <div class="card">
+                <img src="images/page21_img1.jpeg" alt="手工坊" style="width:100%;max-height:min(22vh,180px);object-fit:cover;border-radius:clamp(6px,1vw,10px);margin-bottom:clamp(0.4rem,0.8vh,0.6rem);">
+                <h3>春田花花织梦手工坊</h3>
+                <ul>
+                    <li>绕线艺术 + 折纸涂色</li>
+                    <li>复刻春田花花幼儿园氛围</li>
+                    <li>材料包销售 + 艺术老师指导</li>
+                </ul>
+            </div>
+        </div>
+        <div class="grid-2 reveal-scale mt-md" style="max-width:min(90vw,900px);">
+            <div class="card">
+                <h3>IP户外研学教育</h3>
+                <ul>
+                    <li>IP主题车 + 户外研学体验</li>
+                    <li>每季度更换不同IP视觉主题</li>
+                    <li>「内容+教育+商业」升级</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>麦兜语录花园</h3>
+                <ul>
+                    <li>草坪语录气球装置</li>
+                    <li>梦想、成长、快乐小哲学</li>
+                    <li>社交平台持续传播打卡点</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="slide-num">09 / 22</div>
+</section>
+
+<!-- ===========================================
+     SLIDE 11: CANTONESE CHALLENGE
+     =========================================== -->
+<section class="slide" data-title="粤语挑战">
+    <div class="orb orb-warm" style="width:clamp(200px,28vw,380px);height:clamp(200px,28vw,380px);top:-8%;right:-5%;"></div>
+    <div class="slide-content items-center">
+        <div class="kicker reveal">Interactive Experience</div>
+        <h2 class="reveal">麦兜粤语等级挑战</h2>
+        <p class="subtitle reveal" style="text-align:center;">从1级（萌新）到9级（大状），传承深港广府语言文化</p>
+        <div class="reveal mt-md" style="display:flex;gap:clamp(1rem,2vw,2rem);align-items:center;max-width:min(90vw,800px);flex-wrap:wrap;justify-content:center;">
+            <div class="flex-col gap-sm" style="flex:1;min-width:250px;">
+                <div class="card" style="padding:clamp(0.4rem,0.8vw,0.6rem) clamp(0.6rem,1.2vw,1rem);display:flex;align-items:center;gap:0.6rem;">
+                    <span style="background:var(--accent-green);color:#0f0f0f;width:clamp(20px,2.5vw,28px);height:clamp(20px,2.5vw,28px);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:var(--small-size);font-weight:700;flex-shrink:0;">1</span>
+                    <span style="font-size:var(--small-size);">火鸡味道，味道火鸡，食得好滋味。</span>
+                </div>
+                <div class="card" style="padding:clamp(0.4rem,0.8vw,0.6rem) clamp(0.6rem,1.2vw,1rem);display:flex;align-items:center;gap:0.6rem;">
+                    <span style="background:var(--accent-warm);color:#0f0f0f;width:clamp(20px,2.5vw,28px);height:clamp(20px,2.5vw,28px);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:var(--small-size);font-weight:700;flex-shrink:0;">5</span>
+                    <span style="font-size:var(--small-size);">邮差叔叔送信纯熟迅速送出。</span>
+                </div>
+                <div class="card" style="padding:clamp(0.4rem,0.8vw,0.6rem) clamp(0.6rem,1.2vw,1rem);display:flex;align-items:center;gap:0.6rem;">
+                    <span style="background:var(--accent-pink);color:#0f0f0f;width:clamp(20px,2.5vw,28px);height:clamp(20px,2.5vw,28px);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:var(--small-size);font-weight:700;flex-shrink:0;">9</span>
+                    <span style="font-size:var(--small-size);">纸包鸡唔系鸡包纸包鸡，而系纸包鸡包纸包鸡包纸包鸡包鸡！</span>
+                </div>
+            </div>
+            <img src="images/page25_img1.jpeg" alt="麦兜粤语挑战" class="slide-image-sm slide-image-round" style="max-height:min(30vh,240px);flex-shrink:0;">
+        </div>
+    </div>
+    <div class="slide-num">10 / 22</div>
+</section>
+
+<!-- ===========================================
+     SLIDE 12: NATURE TRILOGY SECTION TITLE
+     =========================================== -->
+<section class="slide section-slide" data-title="自然三部曲">
+    <div class="section-num" style="top:8%;left:8%;">03</div>
+    <div class="orb orb-green" style="width:clamp(300px,45vw,550px);height:clamp(300px,45vw,550px);top:-15%;right:-10%;"></div>
+    <div class="orb orb-blue" style="width:clamp(180px,25vw,350px);height:clamp(180px,25vw,350px);bottom:-8%;left:5%;"></div>
+    <div class="slide-content items-center text-center">
+        <div class="accent-line reveal"></div>
+        <div class="kicker reveal">Nature Trilogy</div>
+        <h1 class="reveal" style="font-size:var(--h2-size);">自然三部曲 <em>IP 联名合作</em></h1>
+        <p class="subtitle reveal">奥斯卡最佳动画提名 · 全球手绘动画美学巅峰<br>八十余项国际重磅奖项</p>
+        <img src="images/page31_img1.jpeg" alt="自然三部曲" class="slide-image reveal mt-md" style="max-height:min(30vh,240px);">
+    </div>
+</section>
+
+<!-- ===========================================
+     SLIDE 13: THREE FILMS
+     =========================================== -->
+<section class="slide" data-title="三部电影">
+    <div class="slide-content items-center" style="justify-content:center;">
+        <div class="grid-3 reveal-scale" style="max-width:min(92vw,950px);">
+            <div class="film-card">
+                <img src="images/page33_img1.jpeg" alt="凯尔经的秘密">
+                <div class="film-card-body">
+                    <h3>凯尔经的秘密</h3>
+                    <div class="film-en">The Secret of Kells</div>
+                    <p>翡翠绿 + 金色装饰纹<br>凯尔特修道院的奇幻冒险</p>
+                </div>
+            </div>
+            <div class="film-card">
+                <img src="images/page35_img1.jpeg" alt="海洋之歌">
+                <div class="film-card-body">
+                    <h3>海洋之歌</h3>
+                    <div class="film-en">Song of the Sea</div>
+                    <p>深海蓝 + 水波纹<br>兄妹与海豹精灵的温情故事</p>
+                </div>
+            </div>
+            <div class="film-card">
+                <img src="images/page37_img1.jpeg" alt="狼行者">
+                <div class="film-card-body">
+                    <h3>狼行者</h3>
+                    <div class="film-en">Wolfwalkers</div>
+                    <p>琥珀黄 + 线条图腾<br>女孩与狼群的森林传奇</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-num">12 / 22</div>
+</section>
+
+<!-- ===========================================
+     SLIDE 14: NATURE IP VALUE
+     =========================================== -->
+<section class="slide" data-title="自然IP价值">
+    <div class="orb orb-green" style="width:clamp(200px,30vw,400px);height:clamp(200px,30vw,400px);bottom:-10%;left:-5%;"></div>
+    <div class="slide-content items-center">
+        <div class="kicker reveal">IP Value</div>
+        <h2 class="reveal">自然三部曲 IP 价值</h2>
+        <div class="grid-2 reveal-scale mt-md" style="max-width:min(90vw,850px);">
+            <div class="card">
+                <h3><span style="color:var(--accent-warm);">🔥</span> 暑期热度</h3>
+                <p>2026暑期院线联映，暑期热度联动，天然话题引爆</p>
+            </div>
+            <div class="card">
+                <h3><span style="color:var(--accent-green);">🎨</span> 艺术独特性</h3>
+                <p>全球手绘动画巅峰，视觉风格极具辨识度，天然适合社交传播</p>
+            </div>
+            <div class="card">
+                <h3><span style="color:var(--accent-blue);">🌱</span> 自然教育内核</h3>
+                <p>每部电影都探讨人与自然的关系，与公园科普区、生态区高度契合</p>
+            </div>
+            <div class="card">
+                <h3><span style="color:var(--accent-pink);">🌍</span> 国际化视野</h3>
+                <p>深港链接全球，契合深港儿童友好主题，辐射国际品质与视野</p>
+            </div>
+        </div>
+    </div>
+    <div class="slide-num">13 / 22</div>
+</section>
+
+<!-- ===========================================
+     SLIDE 15: NATURE EXPERIENCES 1
+     =========================================== -->
+<section class="slide" data-title="自然体验1">
+    <div class="orb orb-blue" style="width:clamp(180px,25vw,350px);height:clamp(180px,25vw,350px);top:-5%;right:-3%;"></div>
+    <div class="slide-content items-center">
+        <div class="kicker reveal">Nature Experiences</div>
+        <h2 class="reveal">核心体验项目</h2>
+        <div class="grid-2 reveal-scale mt-md" style="max-width:min(90vw,900px);">
+            <div class="card">
+                <img src="images/page41_img1.jpeg" alt="自然绘本" style="width:100%;max-height:min(22vh,180px);object-fit:cover;border-radius:clamp(6px,1vw,10px);margin-bottom:clamp(0.4rem,0.8vh,0.6rem);">
+                <h3>城市自然绘本 · 120种植物</h3>
+                <p>面向全市儿童征集植物绘本，邀请导演汤姆·摩尔担任评委，获奖作品在开园现场展示。</p>
+            </div>
+            <div class="card">
+                <img src="images/page43_img1.jpeg" alt="露天电影" style="width:100%;max-height:min(22vh,180px);object-fit:cover;border-radius:clamp(6px,1vw,10px);margin-bottom:clamp(0.4rem,0.8vh,0.6rem);">
+                <h3>星空露天电影放映</h3>
+                <p>公园草坪沉浸式户外放映空间，映后导演交流环节，限定版票根和衍生周边。</p>
+            </div>
+        </div>
+    </div>
+    <div class="slide-num">14 / 22</div>
+</section>
+
+<!-- ===========================================
+     SLIDE 16: NATURE EXPERIENCES 2
+     =========================================== -->
+<section class="slide" data-title="自然体验2">
+    <div class="orb orb-green" style="width:clamp(200px,30vw,380px);height:clamp(200px,30vw,380px);bottom:-8%;left:-5%;"></div>
+    <div class="slide-content items-center text-center">
+        <h2 class="reveal">自然三部曲主题氛围</h2>
+        <p class="subtitle reveal">让孩子走进一座会讲故事的公园</p>
+        <img src="images/page45_img1.jpeg" alt="主题氛围装置" class="slide-image reveal mt-md" style="max-height:min(32vh,260px);">
+        <div class="grid-2 reveal mt-md" style="max-width:min(85vw,700px);">
+            <div class="card" style="padding:clamp(0.5rem,1vw,0.8rem) clamp(0.6rem,1.2vw,1rem);">
+                <p style="font-size:var(--small-size);">自然主题气球装置<br>亲子拍照打卡点</p>
+            </div>
+            <div class="card" style="padding:clamp(0.5rem,1vw,0.8rem) clamp(0.6rem,1.2vw,1rem);">
+                <p style="font-size:var(--small-size);">草丛中隐藏「自然精灵」<br>互动式探索体验</p>
+            </div>
+        </div>
+    </div>
+    <div class="slide-num">15 / 22</div>
+</section>
+
+<!-- ===========================================
+     SLIDE 17: OPENING CEREMONY TITLE
+     =========================================== -->
+<section class="slide section-slide" data-title="开园仪式">
+    <div class="section-num" style="bottom:10%;right:8%;">04</div>
+    <div class="orb orb-warm" style="width:clamp(250px,35vw,450px);height:clamp(250px,35vw,450px);top:-10%;left:-5%;"></div>
+    <div class="orb orb-pink" style="width:clamp(160px,22vw,300px);height:clamp(160px,22vw,300px);bottom:-5%;right:-3%;"></div>
+    <div class="slide-content items-center text-center">
+        <div class="accent-line reveal"></div>
+        <div class="kicker reveal">Opening Ceremony</div>
+        <h1 class="reveal" style="font-size:var(--h2-size);"><em>6.1</em> 开园仪式</h1>
+        <p class="subtitle reveal">IP活动落地策划 · 三大仪式感设计</p>
+    </div>
+</section>
+
+<!-- ===========================================
+     SLIDE 18: OPENING EVENTS
+     =========================================== -->
+<section class="slide" data-title="开园活动">
+    <div class="orb orb-warm" style="width:clamp(180px,25vw,350px);height:clamp(180px,25vw,350px);bottom:-8%;right:-3%;"></div>
+    <div class="slide-content items-center">
+        <div class="timeline reveal" style="width:100%;">
+            <div class="timeline-item">
+                <div class="timeline-dot" style="background:var(--accent-pink);"></div>
+                <div class="timeline-text">
+                    <h4>「麦兜的歌声」开园主题音乐会</h4>
+                    <p>深港两地儿童合唱团 + 歌手刘莉旻 + AI合唱团，动画、童声与科技互动结合</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot" style="background:var(--accent-warm);"></div>
+                <div class="timeline-text">
+                    <h4>「麦兜欢乐巡游」开园嘉年华</h4>
+                    <p>贯穿全园区的麦兜欢乐花车巡游，6-8月延续周末定时巡游表演</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot" style="background:var(--accent-green);"></div>
+                <div class="timeline-text">
+                    <h4>儿童创意手工大赛</h4>
+                    <p>围绕"自然""动物""公园""梦想城市"主题自由创作</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot" style="background:var(--accent-blue);"></div>
+                <div class="timeline-text">
+                    <h4>社交传播同步发酵</h4>
+                    <p>专属话题 #麦兜去儿童公园啦# · 深港亲子KOL探园VLOG</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slide-num">17 / 22</div>
+</section>
+
+<!-- ===========================================
+     SLIDE 19: COMMERCIAL SECTION TITLE
+     =========================================== -->
+<section class="slide section-slide" data-title="商业布局">
+    <div class="section-num" style="top:10%;left:8%;">05</div>
+    <div class="orb orb-blue" style="width:clamp(250px,35vw,450px);height:clamp(250px,35vw,450px);bottom:-12%;right:-8%;"></div>
+    <div class="slide-content items-center text-center">
+        <div class="accent-line reveal"></div>
+        <div class="kicker reveal">Commercial Layout</div>
+        <h1 class="reveal" style="font-size:var(--h2-size);">商业及点位布局</h1>
+        <p class="subtitle reveal">轻介入、高颜值、IP赋能的商业生态</p>
+        <img src="images/page59_img1.jpeg" alt="公园建筑功能布局" class="slide-image reveal mt-md" style="max-height:min(32vh,260px);">
+    </div>
+</section>
+
+<!-- ===========================================
+     SLIDE 20: COMMERCIAL PRINCIPLES
+     =========================================== -->
+<section class="slide" data-title="选址原则">
+    <div class="orb orb-pink" style="width:clamp(160px,22vw,300px);height:clamp(160px,22vw,300px);top:-5%;left:-3%;"></div>
+    <div class="slide-content items-center">
+        <div class="kicker reveal">Site Principles</div>
+        <h2 class="reveal">选址四大原则</h2>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(0.5rem,1vw,1rem);max-width:min(92vw,900px);margin-top:var(--content-gap);" class="reveal-scale">
+            <div class="principle">
+                <div class="principle-icon">📍</div>
+                <h4>就近需求</h4>
+                <p>紧邻高频使用区域</p>
+            </div>
+            <div class="principle">
+                <div class="principle-icon">🌿</div>
+                <h4>不遮主景</h4>
+                <p>轻型摊车不破坏公园美观</p>
+            </div>
+            <div class="principle">
+                <div class="principle-icon">🎨</div>
+                <h4>IP联名赋能</h4>
+                <p>统一纳入IP视觉体系</p>
+            </div>
+            <div class="principle">
+                <div class="principle-icon">⚖️</div>
+                <h4>轻介入原则</h4>
+                <p>永久与临时结合</p>
+            </div>
+        </div>
+    </div>
+    <div class="slide-num">19 / 22</div>
+
+    <style>
+        @media (max-width: 600px) {
+            .principle { padding: clamp(0.5rem,1.5vw,0.8rem); }
+        }
+    </style>
+</section>
+
+<!-- ===========================================
+     SLIDE 21: COMMERCIAL TABLE
+     =========================================== -->
+<section class="slide" data-title="点位规划">
+    <div class="orb orb-warm" style="width:clamp(180px,25vw,350px);height:clamp(180px,25vw,350px);bottom:-8%;right:-5%;"></div>
+    <div class="slide-content items-center">
+        <div class="kicker reveal">Layout Plan</div>
+        <h2 class="reveal">点位规划一览</h2>
+        <div class="reveal-scale mt-md" style="max-width:min(92vw,900px);width:100%;overflow-x:auto;">
+            <table class="data-table">
+                <thead>
+                    <tr><th>位置</th><th>点位类型</th><th>商业内容</th><th>特色/创意</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>北入口区</td><td>纪念品旗舰摊</td><td>IP联名周边</td><td>「麦兜工厂直营」设计感摊位</td></tr>
+                    <tr><td>活动草坪区</td><td>深港美食餐车</td><td>港式餐车</td><td>"麦太太的餐车"快闪</td></tr>
+                    <tr><td>森林探索区</td><td>手作工作坊</td><td>植物拓印、毛线串珠</td><td>限额预约制，每场10-15组</td></tr>
+                    <tr><td>亲子乐园区</td><td>IP衍生摊位</td><td>气球、贴纸包</td><td>与打卡点配套</td></tr>
+                    <tr><td>草坪舞台旁</td><td>饮品</td><td>精品咖啡 + 儿童果汁</td><td>「麦兜时光机」主题调饮</td></tr>
+                    <tr><td>湿地生境区</td><td>心愿卡售卖</td><td>麦兜形状心愿卡</td><td>「深港童心」公益联名</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="slide-num">20 / 22</div>
+</section>
+
+<!-- ===========================================
+     SLIDE 22: VISION / CLOSING
+     =========================================== -->
+<section class="slide section-slide" data-title="愿景">
+    <div class="orb orb-warm" style="width:clamp(300px,45vw,550px);height:clamp(300px,45vw,550px);top:-15%;right:-10%;"></div>
+    <div class="orb orb-green" style="width:clamp(200px,30vw,400px);height:clamp(200px,30vw,400px);bottom:-10%;left:-5%;"></div>
+    <div class="orb orb-pink" style="width:clamp(150px,20vw,280px);height:clamp(150px,20vw,280px);top:30%;left:20%;"></div>
+    <div class="slide-content items-center text-center">
+        <img src="images/page61_img1.jpeg" alt="儿童公园愿景" class="slide-image reveal slide-image-round" style="max-height:min(25vh,200px);margin-bottom:clamp(1rem,3vh,2rem);">
+        <h1 class="reveal" style="font-size:clamp(1.3rem,3.5vw,2.5rem);line-height:1.5;">
+            以 IP 内容驱动空间活力<br>
+            以文化体验激发公共参与<br>
+            <em>以商业运营反哺公共服务</em>
+        </h1>
+        <p class="subtitle reveal" style="margin-top:clamp(0.8rem,2vh,1.5rem);">
+            让深圳市儿童公园成为<br>
+            城市儿童文化生活的核心场域<br>
+            儿童友好城市建设的重要示范
+        </p>
+        <div class="accent-line-h reveal" style="margin-top:clamp(1.5rem,4vh,3rem);"></div>
+        <div class="reveal" style="margin-top:clamp(0.5rem,1vh,0.8rem);">
+            <span style="font-family:var(--font-display);font-style:italic;font-size:var(--small-size);color:var(--text-dim);letter-spacing:3px;">SHENZHEN CHILDREN'S PARK · 2026</span>
+        </div>
+    </div>
+</section>
+
+<!-- ===========================================
+     JAVASCRIPT: Slide Controller
+     =========================================== -->
+<script>
+    class SlidePresentation {
+        constructor() {
+            this.slides = document.querySelectorAll('.slide');
+            this.currentSlide = 0;
+            this.isScrolling = false;
+            this.setupIntersectionObserver();
+            this.setupKeyboardNav();
+            this.setupTouchNav();
+            this.setupProgressBar();
+            this.setupNavDots();
+        }
+
+        /* Intersection Observer: add .visible when slide enters viewport */
+        setupIntersectionObserver() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        const idx = Array.from(this.slides).indexOf(entry.target);
+                        if (idx !== -1) {
+                            this.currentSlide = idx;
+                            this.updateNavDots();
+                            this.updateProgressBar();
+                        }
+                    }
+                });
+            }, { threshold: 0.4 });
+            this.slides.forEach(s => observer.observe(s));
+        }
+
+        /* Keyboard: arrows, space, page up/down */
+        setupKeyboardNav() {
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+                    e.preventDefault();
+                    this.goToSlide(this.currentSlide + 1);
+                } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft' || e.key === 'PageUp') {
+                    e.preventDefault();
+                    this.goToSlide(this.currentSlide - 1);
+                } else if (e.key === 'Home') {
+                    e.preventDefault();
+                    this.goToSlide(0);
+                } else if (e.key === 'End') {
+                    e.preventDefault();
+                    this.goToSlide(this.slides.length - 1);
+                }
+            });
+        }
+
+        /* Touch/swipe navigation */
+        setupTouchNav() {
+            let startY = 0;
+            document.addEventListener('touchstart', (e) => { startY = e.touches[0].clientY; }, { passive: true });
+            document.addEventListener('touchend', (e) => {
+                const diff = startY - e.changedTouches[0].clientY;
+                if (Math.abs(diff) > 50) {
+                    this.goToSlide(this.currentSlide + (diff > 0 ? 1 : -1));
+                }
+            }, { passive: true });
+        }
+
+        /* Progress bar */
+        setupProgressBar() {
+            this.progressBar = document.getElementById('progressBar');
+            this.updateProgressBar();
+        }
+        updateProgressBar() {
+            if (!this.progressBar) return;
+            const pct = ((this.currentSlide + 1) / this.slides.length) * 100;
+            this.progressBar.style.width = pct + '%';
+        }
+
+        /* Navigation dots */
+        setupNavDots() {
+            const container = document.getElementById('navDots');
+            if (!container) return;
+            this.slides.forEach((slide, i) => {
+                const dot = document.createElement('button');
+                dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+                dot.setAttribute('aria-label', slide.dataset.title || ('Slide ' + (i + 1)));
+                dot.addEventListener('click', () => this.goToSlide(i));
+                container.appendChild(dot);
+            });
+            this.dots = container.querySelectorAll('.nav-dot');
+        }
+        updateNavDots() {
+            if (!this.dots) return;
+            this.dots.forEach((d, i) => d.classList.toggle('active', i === this.currentSlide));
+        }
+
+        /* Navigate to slide */
+        goToSlide(index) {
+            if (index < 0 || index >= this.slides.length) return;
+            this.slides[index].scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+
+    new SlidePresentation();
+</script>
+
+</body>
+</html>
